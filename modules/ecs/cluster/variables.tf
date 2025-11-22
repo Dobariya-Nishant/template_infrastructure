@@ -12,16 +12,23 @@ variable "environment" {
   type        = string
 }
 
-# =========================
-# Auto Scaling Groups (ASG)
-# =========================
-
-variable "auto_scaling_groups" {
-  description = "Map of ASGs with their configs (optional)"
-  type = map(object({
-    name            = string
-    arn             = string
-    target_capacity = optional(number, 80)
-  }))
-  default = {}
+variable "fargate_weight" {
+  description = "Deployment environment identifier (e.g., dev, staging, prod). Used for environment-specific tagging and naming."
+  type        = string
 }
+
+variable "fargate_base" {
+  description = "Deployment environment identifier (e.g., dev, staging, prod). Used for environment-specific tagging and naming."
+  type        = string
+}
+
+variable "fargate_spot_weight" {
+  description = "Deployment environment identifier (e.g., dev, staging, prod). Used for environment-specific tagging and naming."
+  type        = string
+}
+
+variable "fargate_spot_base" {
+  description = "Deployment environment identifier (e.g., dev, staging, prod). Used for environment-specific tagging and naming."
+  type        = string
+}
+

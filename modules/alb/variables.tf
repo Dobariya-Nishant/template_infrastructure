@@ -43,11 +43,7 @@ variable "security_groups" {
 variable "acm_certificate_arn" {
   description = "Acm certificate for HTTPS"
   type        = string
-}
-
-variable "hostedzone_id" {
-  description = "Route53 Hosted Zone ID for your domain"
-  type        = string
+  default     = null
 }
 
 # =============

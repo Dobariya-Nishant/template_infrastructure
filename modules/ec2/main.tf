@@ -1,9 +1,9 @@
 resource "aws_instance" "this" {
-  ami                         = data.aws_ami.this.id
-  instance_type               = var.instance_type
-  subnet_id                   = var.subnet_id
-  key_name                    = aws_key_pair.this.key_name
-  security_groups             = var.security_groups
+  ami             = data.aws_ami.this.id
+  instance_type   = var.instance_type
+  subnet_id       = var.subnet_id
+  key_name        = aws_key_pair.this.key_name
+  security_groups = var.security_groups
 
   ebs_block_device {
     device_name           = "/dev/xvda"

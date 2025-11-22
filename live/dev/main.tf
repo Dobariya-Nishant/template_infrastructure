@@ -11,17 +11,24 @@ module "vpc" {
 }
 
 module "alb" {
-  source          = "../../../modules/alb"
+  source          = "../../modules/alb"
   name            = "main"
   project_name    = var.project_name
   environment     = var.environment
   subnet_ids      = module.vpc.public_subnets
-  security_groups = module.vpc.alb_sg
-  vpc_id          = local.vpc_id
+  security_groups = [module.vpc.alb_sg]
+  vpc_id          = module.vpc.id
 
   target_groups = {
-    api = {
-      name              = "api"
+    frontend = {
+      name              = "frontend"
+      port              = 80
+      protocol          = "HTTP"
+      target_type       = "ip"
+      health_check_path = "/"
+    }
+    backend = {
+      name              = "backend"
       port              = 80
       protocol          = "HTTP"
       target_type       = "ip"
@@ -31,12 +38,12 @@ module "alb" {
 
   listener = {
     name             = "main"
-    target_group_key = "web"
+    target_group_key = "frontend"
     rules = {
       api_rule = {
         description      = "API path routing"
-        target_group_key = "api"
-        hosts            = ["dev.api.kea.net"]
+        target_group_key = "backend"
+        hosts            = ["dev.api.keatech.net"]
       }
     }
   }
@@ -45,8 +52,12 @@ module "alb" {
 module "cluster" {
   source = "../../modules/ecs/cluster"
 
-  project_name = var.project_name
-  environment  = var.environment
+  project_name        = var.project_name
+  environment         = var.environment
+  fargate_base        = 0
+  fargate_weight      = 1
+  fargate_spot_weight = 4
+  fargate_spot_base   = 0
 }
 
 module "backend_ecr" {
@@ -57,3 +68,4 @@ module "backend_ecr" {
   project_name     = var.project_name
   environment      = var.environment
 }
+

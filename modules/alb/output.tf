@@ -5,15 +5,15 @@ output "id" {
 
 output "listener_arn" {
   description = "ARN of the ALB HTTPS listener."
-  value       = aws_lb_listener.https.arn
+  value       = var.acm_certificate_arn != null ? aws_lb_listener.https[0].arn : aws_lb_listener.http[0].arn
 }
 
 output "dns_name" {
   value = aws_lb.this.dns_name
 }
 
-output "dns_name" {
-  value = aws_lb.this.dns_name
+output "zone_id" {
+  value = aws_lb.this.zone_id
 }
 
 output "blue_tg" {
